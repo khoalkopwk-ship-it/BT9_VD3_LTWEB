@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layouts/layout :: head('Đăng ký')}"></head>
+
+<body>
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+        <h1>Đăng ký</h1>
+
+        <form th:action="@{/register}"
+              th:object="${registerDTO}"
+              method="post">
+
+            <div th:if="${#fields.hasGlobalErrors()}"
+                 class="alert error">
+
+                <p th:each="e : ${#fields.globalErrors()}"
+                   th:text="${e}">
+                </p>
+
+            </div>
+
+            <label>Username</label>
+
+            <input th:field="*{username}">
+
+            <small class="error-text"
+                   th:errors="*{username}">
+            </small>
+
+
+            <label>Email</label>
+
+            <input type="email"
+                   th:field="*{email}">
+
+            <small class="error-text"
+                   th:errors="*{email}">
+            </small>
+
+
+            <label>Họ tên</label>
+
+            <input th:field="*{fullName}">
+
+            <small class="error-text"
+                   th:errors="*{fullName}">
+            </small>
+
+
+            <label>Password</label>
+
+            <input type="password"
+                   th:field="*{password}">
+
+            <small class="error-text"
+                   th:errors="*{password}">
+            </small>
+
+
+            <label>Confirm Password</label>
+
+            <input type="password"
+                   th:field="*{confirmPassword}">
+
+            <small class="error-text"
+                   th:errors="*{confirmPassword}">
+            </small>
+
+
+            <button class="button full"
+                    type="submit">
+
+                Đăng ký
+
+            </button>
+
+        </form>
+
+        <p>
+            <a th:href="@{/login}">
+                Đã có tài khoản?
+            </a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

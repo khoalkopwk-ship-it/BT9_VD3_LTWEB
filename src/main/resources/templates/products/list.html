@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layouts/layout :: head('Products')}"></head>
+
+<body>
+
+<div th:replace="~{layouts/layout :: page(~{::main})}">
+
+    <main>
+
+        <h1>Quản lý Products</h1>
+
+        <div th:if="${success}"
+             class="alert success"
+             th:text="${success}">
+        </div>
+
+        <div class="toolbar">
+
+            <form th:action="@{/products}"
+                  method="get">
+
+                <input name="keyword"
+                       th:value="${keyword}"
+                       placeholder="Tên sản phẩm, mô tả...">
+
+                <input type="hidden"
+                       name="size"
+                       th:value="${size}">
+
+                <button class="button">
+                    Tìm kiếm
+                </button>
+
+            </form>
+
+            <a class="button"
+               th:href="@{/products/create}">
+
+                + Thêm Product
+
+            </a>
+
+        </div>
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Ảnh</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>User</th>
+                <th>Action</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr th:each="p : ${products.content}">
+
+                <td th:text="${p.id}"></td>
+
+                <td>
+
+                    <img th:if="${p.imageUrl != null}"
+                         th:src="${#strings.substringBefore(p.imageUrl, '|')}"
+                         class="thumb">
+
+                    <span th:unless="${p.imageUrl != null}">
+                        No image
+                    </span>
+
+                </td>
+
+                <td th:text="${p.name}"></td>
+
+                <td th:text="${#numbers.formatDecimal(
+                        p.price,
+                        0,
+                        'COMMA',
+                        2,
+                        'POINT'
+                )}">
+                </td>
+
+                <td th:text="${p.username}"></td>
+
+                <td class="actions">
+
+                    <a th:href="@{/products/edit/{id}(id=${p.id})}">
+                        Edit
+                    </a>
+
+                    <form th:action="@{/products/delete/{id}(id=${p.id})}"
+                          method="post"
+                          onsubmit="return confirm('Xóa product này?')">
+
+                        <button class="danger-link">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            <tr th:if="${products.empty}">
+
+                <td colspan="6">
+                    Không có dữ liệu.
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <div class="pagination">
+
+            <a th:if="${products.hasPrevious()}"
+               th:href="@{/products(
+                    page=${products.number - 1},
+                    size=${size},
+                    keyword=${keyword}
+               )}">
+                «
+            </a>
+
+            <span th:each="i :
+                    ${#numbers.sequence(
+                        0,
+                        products.totalPages > 0
+                        ? products.totalPages - 1
+                        : 0
+                    )}">
+
+                <a th:classappend="${i == products.number ? 'active' : ''}"
+                   th:href="@{/products(
+                        page=${i},
+                        size=${size},
+                        keyword=${keyword}
+                   )}"
+                   th:text="${i + 1}">
+                </a>
+
+            </span>
+
+            <a th:if="${products.hasNext()}"
+               th:href="@{/products(
+                    page=${products.number + 1},
+                    size=${size},
+                    keyword=${keyword}
+               )}">
+                »
+            </a>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

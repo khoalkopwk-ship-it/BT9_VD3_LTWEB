@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title)">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title th:text="${title ?: 'UTE SHOP'}">
+        UTE SHOP
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/app.css}">
+
+</head>
+
+<body>
+
+<div th:fragment="page(content)">
+
+    <header th:replace="~{fragments/header :: header}">
+    </header>
+
+    <main class="container"
+          th:replace="${content}">
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}">
+    </footer>
+
+</div>
+
+</body>
+
+</html>

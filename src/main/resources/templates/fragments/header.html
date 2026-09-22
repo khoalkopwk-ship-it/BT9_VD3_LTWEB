@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<header th:fragment="header"
+        class="header">
+
+    <a th:href="@{/}"
+       class="brand">
+
+        UTE SHOP
+
+    </a>
+
+    <nav>
+
+        <a th:href="@{/}">
+            Dashboard
+        </a>
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+           th:href="@{/users}">
+            Users
+        </a>
+
+    </nav>
+
+    <div class="account"
+         th:if="${#authorization.expression('isAuthenticated()')}">
+
+        <span th:text="${#authentication.name}">
+        </span>
+
+        <form th:action="@{/logout}"
+              method="post"
+              style="display:inline">
+
+            <button type="submit"
+                    class="link-button">
+
+                Logout
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+
+        <a th:href="@{/login}">
+            Login
+        </a>
+
+    </div>
+
+</header>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layouts/layout :: head('Dashboard')}"></head>
+
+<body>
+
+<div th:replace="~{layouts/layout :: page(~{::main})}">
+
+    <main>
+
+        <h1>Dashboard</h1>
+
+        <div th:if="${success}"
+             class="alert success"
+             th:text="${success}">
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>Total Users</h3>
+
+                <strong th:text="${userCount}">
+                    0
+                </strong>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Total Products</h3>
+
+                <strong th:text="${productCount}">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div class="quick-links">
+
+            <a class="button"
+               th:href="@{/products}">
+
+                Quản lý Products
+
+            </a>
+
+            <a class="button"
+               th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+               th:href="@{/users}">
+
+                Quản lý Users
+
+            </a>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

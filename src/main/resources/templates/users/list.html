@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layouts/layout :: head('Users')}"></head>
+
+<body>
+
+<div th:replace="~{layouts/layout :: page(~{::main})}">
+
+    <main>
+
+        <h1>Quản lý Users</h1>
+
+
+        <div th:if="${success}"
+             class="alert success"
+             th:text="${success}">
+        </div>
+
+
+        <div class="toolbar">
+
+            <form th:action="@{/users}"
+                  method="get">
+
+                <input name="keyword"
+                       th:value="${keyword}"
+                       placeholder="Username, email, họ tên...">
+
+                <input type="hidden"
+                       name="size"
+                       th:value="${size}">
+
+                <button class="button">
+                    Tìm kiếm
+                </button>
+
+            </form>
+
+
+            <a class="button"
+               th:href="@{/users/create}">
+
+                + Thêm User
+
+            </a>
+
+        </div>
+
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Họ tên</th>
+                <th>Role</th>
+                <th>Enabled</th>
+                <th>Products</th>
+                <th>Action</th>
+            </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            <tr th:each="u : ${users.content}">
+
+                <td th:text="${u.id}"></td>
+
+                <td th:text="${u.username}"></td>
+
+                <td th:text="${u.email}"></td>
+
+                <td th:text="${u.fullName}"></td>
+
+                <td th:text="${u.roleName}"></td>
+
+                <td th:text="${u.enabled ? 'ACTIVE' : 'INACTIVE'}"></td>
+
+                <td th:text="${u.productCount}"></td>
+
+                <td class="actions">
+
+                    <a th:href="@{/users/edit/{id}(id=${u.id})}">
+                        Edit
+                    </a>
+
+                    <form th:action="@{/users/delete/{id}(id=${u.id})}"
+                          method="post"
+                          onsubmit="return confirm('Xóa user này?')">
+
+                        <button class="danger-link">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+
+            <tr th:if="${users.empty}">
+
+                <td colspan="8">
+                    Không có dữ liệu.
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <div class="pagination">
+
+            <a th:if="${users.hasPrevious()}"
+               th:href="@{/users(
+                    page=${users.number - 1},
+                    size=${size},
+                    keyword=${keyword}
+               )}">
+                «
+            </a>
+
+
+            <span th:each="i :
+                ${#numbers.sequence(
+                    0,
+                    users.totalPages > 0
+                    ? users.totalPages - 1
+                    : 0
+                )}">
+
+                <a th:classappend="${i == users.number ? 'active' : ''}"
+                   th:href="@{/users(
+                        page=${i},
+                        size=${size},
+                        keyword=${keyword}
+                   )}"
+                   th:text="${i + 1}">
+                </a>
+
+            </span>
+
+
+            <a th:if="${users.hasNext()}"
+               th:href="@{/users(
+                    page=${users.number + 1},
+                    size=${size},
+                    keyword=${keyword}
+               )}">
+                »
+            </a>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="
+~{layouts/layout :: head(
+    ${mode == 'create'
+    ? 'Thêm User'
+    : 'Sửa User'}
+)}">
+</head>
+
+<body>
+
+<div th:replace="~{layouts/layout :: page(~{::main})}">
+
+    <main>
+
+        <div class="form-card">
+
+            <form th:object="${userDTO}"
+                  method="post"
+                  accept-charset="UTF-8"
+                  th:action="${mode == 'create'}
+                    ? @{/users/create}
+                    : @{/users/edit/{id}(id=${userDTO.id})}">
+
+
+                <h1 th:text="
+                    ${mode == 'create'
+                    ? 'Thêm User'
+                    : 'Sửa User'}">
+                </h1>
+
+
+                <div th:if="${#fields.hasGlobalErrors()}"
+                     class="alert error">
+
+                    <p th:each="e : ${#fields.globalErrors()}"
+                       th:text="${e}">
+                    </p>
+
+                </div>
+
+
+                <label>Username</label>
+
+                <input th:field="*{username}">
+
+                <small class="error-text"
+                       th:errors="*{username}">
+                </small>
+
+
+                <label>Email</label>
+
+                <input type="email"
+                       th:field="*{email}">
+
+                <small class="error-text"
+                       th:errors="*{email}">
+                </small>
+
+
+                <label>Họ tên</label>
+
+                <input th:field="*{fullName}">
+
+                <small class="error-text"
+                       th:errors="*{fullName}">
+                </small>
+
+
+                <label>Role</label>
+
+                <select th:field="*{roleName}">
+
+                    <option value="ROLE_USER">
+                        USER
+                    </option>
+
+                    <option value="ROLE_ADMIN">
+                        ADMIN
+                    </option>
+
+                </select>
+
+
+                <label>
+
+                    <input type="checkbox"
+                           th:field="*{enabled}">
+
+                    Enabled
+
+                </label>
+
+
+                <button class="button">
+                    Lưu
+                </button>
+
+
+                <a class="button secondary"
+                   th:href="@{/users}">
+
+                    Hủy
+
+                </a>
+
+            </form>
+
+
+            <p th:if="${mode == 'create'}"
+               class="note">
+
+                Mật khẩu mặc định của user do Admin tạo:
+
+                <b>123456</b>.
+
+            </p>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
